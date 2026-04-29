@@ -1,30 +1,29 @@
 body {
-  font-family: Arial, sans-serif;
-  padding: 20px;
-  background: #f4f6f9;
+  margin: 0;
+  padding: 10px;
 }
 
 h1 {
+  font-size: 20px;
   text-align: center;
 }
 
 .form {
-  text-align: center;
-  margin-bottom: 20px;
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  justify-content: center;
 }
 
 input {
-  padding: 8px;
-  margin: 5px;
-  width: 180px;
+  padding: 10px;
+  flex: 1 1 150px;
+  min-width: 120px;
 }
 
 button {
-  padding: 8px 15px;
-  background: #007bff;
-  color: white;
-  border: none;
-  cursor: pointer;
+  padding: 10px;
+  flex: 1 1 120px;
 }
 
 button:hover {
@@ -34,18 +33,35 @@ button:hover {
 table {
   width: 100%;
   border-collapse: collapse;
-  background: white;
 }
 
-th, td {
-  border: 1px solid #ddd;
-  padding: 10px;
-  text-align: center;
-}
+@media (max-width: 600px) {
+  table, thead, tbody, th, td, tr {
+    display: block;
+  }
 
-th {
-  background: #007bff;
-  color: white;
+  thead {
+    display: none;
+  }
+
+  tr {
+    margin-bottom: 15px;
+    background: white;
+    padding: 10px;
+    border-radius: 8px;
+  }
+
+  td {
+    text-align: left;
+    padding: 8px;
+    position: relative;
+  }
+
+  td::before {
+    content: attr(data-label);
+    font-weight: bold;
+    display: block;
+  }
 }
 
 .acoes {

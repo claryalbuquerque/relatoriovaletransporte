@@ -1,48 +1,51 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
-<head>
-  <meta charset="UTF-8">
-  <title>Vale Transporte</title>
+    <head>
+        <meta charset="UTF-8">
+        <title>Vale Transporte</title>
 
-  <!-- Estilo -->
-  <link rel="stylesheet" href="style.css">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <!-- Biblioteca PDF -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+        <!-- Estilo -->
+        <link rel="stylesheet" href="style.css">
 
-</head>
+        <!-- Biblioteca PDF -->
+        <script
+            src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 
-<body>
+    </head>
 
-  <h1>Controle de Vale Transporte</h1>
+    <body>
 
-  <div class="form">
-    <input list="listaFuncionarios" id="nome" placeholder="Nome do funcionário">
-    <datalist id="listaFuncionarios"></datalist>
-    <input type="number" id="dias" placeholder="Dias trabalhados">
-    
-    <button onclick="adicionar()">Adicionar</button>
-  </div>
+        <h1>Controle de Vale Transporte</h1>
 
-  <table id="tabela">
-    <thead>
-      <tr>
-        <th>Nome</th>
-        <th>Cargo</th>
-        <th>Dias</th>
-        <th>Total (R$)</th>
-      </tr>
-    </thead>
-    <tbody></tbody>
-  </table>
+        <div class="form">
+            <input type="text" id="nome" placeholder="Nome">
+            <input type="number" id="dias" placeholder="Dias">
+            <button onclick="adicionar()">Adicionar</button>
+        </div>
 
-  <div class="acoes">
-    <button onclick="gerarPDF()">Baixar PDF</button>
-  </div>
+        <table id="tabela">
+            <thead>
+                <tr>
+                    <th>Nome</th>
+                    <th>Cargo</th>
+                    <th>Dias</th>
+                    <th>Total (R$)</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
 
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.31/jspdf.plugin.autotable.min.js"></script>
-  <script src="script.js"></script>
+        <div class="acoes">
+            <button onclick="gerarPDF()">Baixar PDF</button>
+        </div>
 
-</body>
+        <script
+            src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+        <script
+            src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.31/jspdf.plugin.autotable.min.js"></script>
+        <script src="script.js"></script>
+
+    </body>
 </html>
