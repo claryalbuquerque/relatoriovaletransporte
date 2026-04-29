@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Vale Transporte</title>
+
+  <!-- Estilo -->
+  <link rel="stylesheet" href="style.css">
+
+  <!-- Biblioteca PDF -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+</head>
+
+<body>
+
+  <h1>Controle de Vale Transporte</h1>
+
+  <div class="form">
+    <input list="listaFuncionarios" id="nome" placeholder="Nome do funcionário">
+    <datalist id="listaFuncionarios"></datalist>
+    <input type="number" id="dias" placeholder="Dias trabalhados">
+    
+    <button onclick="adicionar()">Adicionar</button>
+  </div>
+
+  <table id="tabela">
+    <thead>
+      <tr>
+        <th>Nome</th>
+        <th>Cargo</th>
+        <th>Dias</th>
+        <th>Total (R$)</th>
+      </tr>
+    </thead>
+    <tbody></tbody>
+  </table>
+
+  <div class="acoes">
+    <button onclick="gerarPDF()">Baixar PDF</button>
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.31/jspdf.plugin.autotable.min.js"></script>
+  <script src="script.js"></script>
+
+</body>
+</html>
