@@ -1,51 +1,86 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
-    <head>
-        <meta charset="UTF-8">
-        <title>Vale Transporte</title>
+<head>
+  <meta charset="UTF-8">
+  <title>Vale Transporte</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="style.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.31/jspdf.plugin.autotable.min.js"></script>
+</head>
+<body>
 
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <header>
+    <h1>Vale Transporte</h1>
+    <span class="badge">L.A Construtora</span>
+  </header>
 
-        <!-- Estilo -->
-        <link rel="stylesheet" href="style.css">
+  <main>
 
-        <!-- Biblioteca PDF -->
-        <script
-            src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <div class="form-card">
+      <p class="section-title">Adicionar funcionário</p>
+      <div class="form">
 
-    </head>
-
-    <body>
-
-        <h1>Controle de Vale Transporte</h1>
-
-        <div class="form">
-            <input type="text" id="nome" placeholder="Nome">
-            <input type="number" id="dias" placeholder="Dias">
-            <button onclick="adicionar()">Adicionar</button>
+        <div class="field autocomplete">
+          <label for="nome">Nome</label>
+          <input
+            type="text"
+            id="nome"
+            placeholder="Digite o nome..."
+            oninput="filtrarNomes()"
+            autocomplete="off">
+          <div id="sugestoes"></div>
         </div>
 
-        <table id="tabela">
-            <thead>
-                <tr>
-                    <th>Nome</th>
-                    <th>Cargo</th>
-                    <th>Dias</th>
-                    <th>Total (R$)</th>
-                </tr>
-            </thead>
-            <tbody></tbody>
-        </table>
-
-        <div class="acoes">
-            <button onclick="gerarPDF()">Baixar PDF</button>
+        <div class="field">
+          <label for="dias">Dias</label>
+          <input type="number" id="dias" placeholder="0" min="1">
         </div>
 
-        <script
-            src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-        <script
-            src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.31/jspdf.plugin.autotable.min.js"></script>
-        <script src="script.js"></script>
+        <button class="btn-add" onclick="adicionar()">Adicionar</button>
 
-    </body>
+      </div>
+    </div>
+
+    <p class="section-title">Funcionários adicionados</p>
+
+    <div class="table-card">
+      <table id="tabela">
+        <thead>
+          <tr>
+            <th>Nome</th>
+            <th>Cargo</th>
+            <th>Dias</th>
+            <th>Total</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td colspan="4">
+              <div class="empty-state">
+                <p>Nenhum funcionário adicionado ainda.</p>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="acoes">
+      <button class="btn-pdf" onclick="gerarPDF()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+          <polyline points="14 2 14 8 20 8"/>
+          <line x1="12" y1="18" x2="12" y2="12"/>
+          <line x1="9" y1="15" x2="15" y2="15"/>
+        </svg>
+        Baixar PDF
+      </button>
+    </div>
+
+  </main>
+
+  <script src="script.js"></script>
+
+</body>
 </html>

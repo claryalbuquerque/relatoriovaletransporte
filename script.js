@@ -69,92 +69,144 @@ const bancoFuncionarios = [
     { nome: "Jorge Mota", cargo: "Pedreiro", valorDia: 11 },
 ];
 
-function carregarLista() {
-    let datalist = document.getElementById("listaFuncionarios");
+// ==============================
+// 🔍 AUTOCOMPLETE (FUNCIONA NO CELULAR)
+// ==============================
+function filtrarNomes() {
+  let input = document.getElementById("nome").value.toLowerCase();
+  let lista = document.getElementById("sugestoes");
 
-    bancoFuncionarios.forEach(f => {
-        let option = document.createElement("option");
-        option.value = f.nome;
-        datalist.appendChild(option);
-    });
+  lista.innerHTML = "";
+
+  if (!input) return;
+
+  let filtrados = bancoFuncionarios.filter(f =>
+    f.nome.toLowerCase().includes(input)
+  );
+
+  filtrados.forEach(f => {
+    let item = document.createElement("div");
+    item.textContent = f.nome;
+
+    item.onclick = () => {
+      document.getElementById("nome").value = f.nome;
+      lista.innerHTML = "";
+    };
+
+    lista.appendChild(item);
+  });
 }
 
-// chama quando abrir a página
-carregarLista();
+// Fecha sugestões ao clicar fora
+document.addEventListener("click", function(e) {
+  if (!e.target.closest(".autocomplete")) {
+    document.getElementById("sugestoes").innerHTML = "";
+  }
+});
 
+// ==============================
+// ➕ ADICIONAR FUNCIONÁRIO
+// ==============================
 function adicionar() {
-    let nome = document.getElementById("nome").value;
-    let dias = parseInt(document.getElementById("dias").value);
+  let nomeInput = document.getElementById("nome").value;
+  let dias = parseInt(document.getElementById("dias").value);
 
-    if (!nome || isNaN(dias)) {
-        alert("Preencha corretamente!");
-        return;
-    }
+  if (!nomeInput || isNaN(dias)) {
+    alert("Preencha corretamente!");
+    return;
+  }
 
-    // Buscar no banco
-    let funcionarioBanco = bancoFuncionarios.find(f =>
-        f.nome.toLowerCase() === nome.toLowerCase()
-    );
+  // Busca no "banco"
+  let funcionarioBanco = bancoFuncionarios.find(f =>
+    f.nome.toLowerCase() === nomeInput.toLowerCase()
+  );
 
-    if (!funcionarioBanco) {
-        alert("Funcionário não encontrado!");
-        return;
-    }
+  if (!funcionarioBanco) {
+    alert("Funcionário não encontrado!");
+    return;
+  }
 
-    let total = dias * funcionarioBanco.valorDia;
+  let total = dias * funcionarioBanco.valorDia;
 
-    funcionarios.push({
-        nome: funcionarioBanco.nome,
-        cargo: funcionarioBanco.cargo,
-        dias,
-        valorDia: funcionarioBanco.valorDia,
-        total
-    });
+  funcionarios.push({
+    nome: funcionarioBanco.nome,
+    cargo: funcionarioBanco.cargo,
+    dias,
+    valorDia: funcionarioBanco.valorDia,
+    total
+  });
 
-    atualizarTabela();
+  atualizarTabela();
+  limparCampos();
 }
 
+// ==============================
+// 📊 ATUALIZAR TABELA
+// ==============================
 function atualizarTabela() {
-    let tbody = document.querySelector("#tabela tbody");
-    tbody.innerHTML = "";
+  let tbody = document.querySelector("#tabela tbody");
+  tbody.innerHTML = "";
 
-    funcionarios.forEach(f => {
-        let linha = `
-<tr>
-  <td data-label="Nome">${f.nome}</td>
-  <td data-label="Cargo">${f.cargo}</td>
-  <td data-label="Dias">${f.dias}</td>
-  <td data-label="Total">R$ ${f.total.toFixed(2)}</td>
-</tr>
-`;
-        tbody.innerHTML += linha;
-    });
+  if (funcionarios.length === 0) {
+    tbody.innerHTML = `
+      <tr>
+        <td colspan="4">
+          <div class="empty-state">
+            <p>Nenhum funcionário adicionado ainda.</p>
+          </div>
+        </td>
+      </tr>
+    `;
+    return;
+  }
+
+  funcionarios.forEach((f, index) => {
+    let linha = `
+      <tr>
+        <td data-label="Nome">${f.nome}</td>
+        <td data-label="Cargo"><span class="cargo-badge">${f.cargo}</span></td>
+        <td data-label="Dias">${f.dias}</td>
+        <td data-label="Total">
+          ${f.total.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}
+        </td>
+      </tr>
+    `;
+    tbody.innerHTML += linha;
+  });
 }
+
+// ==============================
+// 🧹 LIMPAR CAMPOS
+// ==============================
+function limparCampos() {
+  document.getElementById("nome").value = "";
+  document.getElementById("dias").value = "";
+}
+
+// ==============================
+// 📄 GERAR PDF PROFISSIONAL
+// ==============================
 function gerarPDF() {
-    const { jsPDF } = window.jspdf;
-    let doc = new jsPDF();
+  const { jsPDF } = window.jspdf;
+  let doc = new jsPDF();
 
-    let hoje = new Date();
-    let data = hoje.toLocaleDateString('pt-BR');
+  let hoje = new Date().toLocaleDateString('pt-BR');
 
-    // 🔷 CABEÇALHO
-    doc.setFont("helvetica", "bold");
-    doc.setFontSize(14);
-    doc.text("EMPRESA L.A CONSTRUTORA", 14, 12);
+  // Cabeçalho
+  doc.setFont("helvetica", "bold");
+  doc.setFontSize(14);
+  doc.text("EMPRESA L.A CONSTRUTORA", 14, 12);
 
-    doc.setFont("helvetica", "normal");
-    doc.setFontSize(10);
-    doc.text("Relatório de Vale Transporte Pagos.", 14, 18);
+  doc.setFont("helvetica", "normal");
+  doc.setFontSize(10);
+  doc.text("Relatório de Vale Transporte Pagos.", 14, 18);
 
-    // Data no canto direito
-    doc.text(`Data: ${data}`, 150, 12);
+  doc.text(`Data: ${hoje}`, 150, 12);
 
-    // Linha separadora
-    doc.setDrawColor(0);
-    doc.line(14, 22, 196, 22);
+  doc.line(14, 22, 196, 22);
 
-    // 🔷 TABELA
-    let colunas = ["Nome", "Cargo", "Dias", "Valor Dia", "Total"];
+  // Tabela
+      let colunas = ["Nome", "Cargo", "Dias", "Valor Dia", "Total"];
     let linhas = [];
 
     let totalGeral = 0;
@@ -196,45 +248,24 @@ function gerarPDF() {
 
     let y = doc.lastAutoTable.finalY + 10;
 
-    // 🔷 RESUMO
-    doc.setFont("helvetica", "bold");
-    doc.setFontSize(12);
-    doc.text("Resumo", 14, y);
+  // Resumo
+  let media = funcionarios.length > 0 
+    ? totalGeral / funcionarios.length 
+    : 0;
 
-    y += 8;
+  doc.text(
+    `Total Geral: ${totalGeral.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}`,
+    14,
+    y
+  );
 
-    doc.setFont("helvetica", "normal");
+  y += 6;
 
-    let media = funcionarios.length > 0
-        ? totalGeral / funcionarios.length
-        : 0;
+  // Rodapé
+  let alturaPagina = doc.internal.pageSize.height;
 
-    doc.text(
-        `Total Geral: ${totalGeral.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}`,
-        14,
-        y
-    );
-    y += 6;
-
-
-    // 🔷 RODAPÉ
-    let alturaPagina = doc.internal.pageSize.height;
-
-    doc.setFontSize(9);
-    doc.setTextColor(100);
-
-    doc.text(
-        "Documento gerado automaticamente pelo sistema",
-        14,
-        alturaPagina - 10
-    );
-
-    doc.text(
-        `Página 1`,
-        180,
-        alturaPagina - 10
-    );
-
-    // 🔷 DOWNLOAD
-    doc.save("relatorio_vale_transporte.pdf");
+  doc.setFontSize(9);
+  doc.text("Desenvolvido por Clarisse", 14, alturaPagina - 10);
+  doc.text("Página 1", 180, alturaPagina - 10);
+  doc.save("relatorio_vale_transporte.pdf");
 }
